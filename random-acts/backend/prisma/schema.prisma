@@ -1,0 +1,73 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider     = "mysql"
+  url          = env("DATABASE_URL")
+  relationMode = "prisma"
+}
+
+model User {
+  id              Int       @id @default(autoincrement()) @map("_id")
+  firstName       String?
+  lastName        String?
+  email           String    @unique
+  username        String    @unique
+  password        String
+  confirmPassword String
+  profileImage    String?
+  recipes         Recipe[]
+  comments        Comment[]
+  Rank            Rank[]
+}
+
+model Post {
+  id     Int    @id @default(autoincrement()) @map("_id")
+  title  String
+  userId String
+
+  @@index([userId])
+}
+
+// Define the Recipe model
+model Recipe {
+  id          Int       @id @default(autoincrement())
+  title       String
+  description String
+  authorId    Int
+  author      User      @relation(fields: [authorId], references: [id])
+  comments    Comment[]
+  ranks       Rank[]
+
+  @@index([authorId])
+}
+
+// Define the Comment model
+model Comment {
+  id       Int    @id @default(autoincrement())
+  content  String
+  recipeId Int
+  recipe   Recipe @relation(fields: [recipeId], references: [id])
+  authorId Int
+  author   User   @relation(fields: [authorId], references: [id])
+
+  @@index([authorId])
+  @@index([recipeId])
+}
+
+// Define the Rank model
+model Rank {
+  id       Int    @id @default(autoincrement())
+  rank     Int
+  recipeId Int
+  recipe   Recipe @relation(fields: [recipeId], references: [id])
+  userId   Int
+  user     User   @relation(fields: [userId], references: [id])
+
+  @@index([userId])
+  @@index([recipeId])
+}

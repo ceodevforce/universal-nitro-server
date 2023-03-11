@@ -1,0 +1,15 @@
+{
+  "private": true,
+  "scripts": {
+    "dev": "npx nitropack dev",
+    "build": "npx nitropack build",
+    "preview": "node .output/server/index.mjs"
+  },
+  "dependencies": {
+    "@prisma/client": "^4.11.0",
+    "nitropack": "latest"
+  },
+  "devDependencies": {
+    "prisma": "^4.11.0"
+  }
+}
