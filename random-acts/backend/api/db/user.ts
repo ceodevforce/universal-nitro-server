@@ -1,4 +1,5 @@
 import { prisma } from "./index";
+import {createError, H3Event} from "h3";
 
 export const createUser = async (userDto) => {
 
@@ -13,17 +14,61 @@ export const findAllUser = async () => {
 }
 
 
+export const readUserById = async (event: H3Event) => {
+    try {
+        // @ts-ignore
+        const id = event.context.params.id
+        const user = await prisma.user.findUnique({
+            where: {
+                id: parseInt(id)
+            }
+        })
+        if (!user) {
+            return sendError(event, createError({
+                statusCode: 404,
+                statusMessage: "User not found"
+            }))
+        }
+        return user
+
+    } catch (e) {
+        console.error(e)
+        sendError(event, createError({
+            statusCode: 500,
+            statusMessage: "Error retrieving user"
+        }))
+    }
+
+}
+
+
 export const updateUser = async (updateUserDto) => {
-    const { email, firstName, lastName, confirmPassword, password } = updateUserDto
+
+    const { id, firstName, lastName, password,  profileImage } = updateUserDto
     await prisma.user.update({
         where: {
-            email: email
+            id: id
         },
         data: {
             firstName: firstName,
             lastName: lastName,
-            confirmPassword: confirmPassword,
             password: password
         }
     })
+}
+
+export const deleteUser = async (id, event) => {
+    try {
+        await prisma.user.delete({
+            where: {
+                id
+            }
+        })
+        return "User deleted successfully"
+    } catch (e) {
+        sendError(event, createError({
+            statusCode: 500,
+            statusMessage: "Error updating user"
+        }))
+    }
 }
