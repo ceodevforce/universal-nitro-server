@@ -1,10 +1,22 @@
 import {prisma} from "./index";
 import {createError, H3Event} from "h3";
+import {Recipe} from "../../types/recipe.types";
 
-export const createRecipe = async (recipeDto) => {
-    await prisma.recipe.create({
-        data: recipeDto
-    })
+export const createRecipe = async (recipeDto: Partial<Recipe>) => {
+    try {
+        const { title, description, authorId } = recipeDto
+        return await prisma.recipe.create({
+            // @ts-ignore
+            data: {
+                title,
+                description,
+                authorId
+            }
+        })
+    } catch (e) {
+        console.error(e)
+    }
+
 }
 
 
@@ -69,17 +81,17 @@ export const readRecipeById = async (event: H3Event) => {
     }
 }
 
-export const updateRecipe = async (recipeDto, event) => {
+export const updateRecipe = async (recipeDto: Partial<Recipe>, event: H3Event) => {
    try {
        const {id, title, description, authorId } = recipeDto
        return await prisma.recipe.update({
            where: {
-               id: parseInt(id)
+               id
            },
            data: {
                title,
                description,
-               authorId: parseInt(authorId)
+               authorId
            }
        })
    } catch (e) {

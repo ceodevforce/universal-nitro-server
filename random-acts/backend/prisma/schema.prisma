@@ -1,6 +1,3 @@
-// This is your Prisma schema file,
-// learn more about it in the docs: https://pris.ly/d/prisma-schema
-
 generator client {
   provider = "prisma-client-js"
 }
@@ -12,28 +9,29 @@ datasource db {
 }
 
 model User {
-  id              Int       @id @default(autoincrement()) @map("_id")
-  firstName       String?
-  lastName        String?
-  email           String    @unique
-  username        String    @unique
-  password        String
-  confirmPassword String
-  profileImage    String?
-  recipes         Recipe[]
-  comments        Comment[]
-  Rank            Rank[]
+  email        String    @unique
+  id           Int       @id @default(autoincrement()) @map("_id")
+  firstName    String?
+  lastName     String?
+  password     String
+  profileImage String?
+  username     String    @unique
+  passwordHash String?
+  about        String?
+  updated      DateTime?
+  recipes      Recipe[]
+  comments     Comment[]
+  Rank         Rank[]
 }
 
 model Post {
-  id     Int    @id @default(autoincrement()) @map("_id")
   title  String
+  id     Int    @id @default(autoincrement()) @map("_id")
   userId String
 
   @@index([userId])
 }
 
-// Define the Recipe model
 model Recipe {
   id          Int       @id @default(autoincrement())
   title       String
@@ -46,28 +44,33 @@ model Recipe {
   @@index([authorId])
 }
 
-// Define the Comment model
 model Comment {
   id       Int    @id @default(autoincrement())
   content  String
   recipeId Int
-  recipe   Recipe @relation(fields: [recipeId], references: [id])
   authorId Int
+  recipe   Recipe @relation(fields: [recipeId], references: [id])
   author   User   @relation(fields: [authorId], references: [id])
 
   @@index([authorId])
   @@index([recipeId])
 }
 
-// Define the Rank model
 model Rank {
   id       Int    @id @default(autoincrement())
   rank     Int
   recipeId Int
-  recipe   Recipe @relation(fields: [recipeId], references: [id])
   userId   Int
+  recipe   Recipe @relation(fields: [recipeId], references: [id])
   user     User   @relation(fields: [userId], references: [id])
 
   @@index([userId])
   @@index([recipeId])
+}
+
+model STORAGE {
+  id         String    @id @db.VarChar(255)
+  value      String?   @db.LongText
+  created_at DateTime? @default(now()) @db.Timestamp(0)
+  updated_at DateTime? @default(now()) @db.Timestamp(0)
 }

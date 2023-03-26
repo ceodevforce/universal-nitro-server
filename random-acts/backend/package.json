@@ -6,8 +6,15 @@
     "preview": "node .output/server/index.mjs"
   },
   "dependencies": {
+    "@planetscale/database": "^1.6.0",
     "@prisma/client": "^4.11.0",
-    "nitropack": "latest"
+    "bcrypt": "^5.1.0",
+    "formidable": "^2.1.1",
+    "h3-zod": "^0.4.0",
+    "jsonwebtoken": "^9.0.0",
+    "multer": "^1.4.5-lts.1",
+    "nitropack": "latest",
+    "zod": "^3.21.4"
   },
   "devDependencies": {
     "prisma": "^4.11.0"

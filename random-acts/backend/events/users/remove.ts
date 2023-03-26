@@ -1,17 +1,17 @@
-import {readUserById} from "../db/user";
 import {H3Event} from "h3";
 import {User} from "@prisma/client";
+import {deleteUser, readUserById} from "../../api/db/user";
 
 export default defineEventHandler(async (event: H3Event) => {
     const user: void | User = await readUserById(event)
+    // @ts-ignore
+    const { id } = user
+    const response = await deleteUser(id, event)
     const status = getResponseStatus(event)
-    const cookies = setCookie(event, "randomacts", "Cookies are good")
 
     return {
-        user,
-        status,
-        cookies
+        response,
+        status
     }
-
 
 })
