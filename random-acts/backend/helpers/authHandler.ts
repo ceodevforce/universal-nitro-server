@@ -101,13 +101,12 @@ export const hasAuthorization = async (event: H3Event) => {
     // @ts-ignore
     const { id } = await readUserById(event)
     const { userId } = await verifyToken(event)
-    console.log("USERID: ", userId)
     // const recipe = await readRecipeById(event)
-    const authorized = id === userId
-    if (!authorized) {
+    const authorized = id && userId === event.node.req.profile.id
+    if (!(authorized)) {
         return sendError(event, createError({
             statusCode: 401,
-            statusMessage: "Unauthorized"
+            statusMessage: "Unauthorized user"
         }))
     }
 

@@ -7,13 +7,14 @@ import * as fs from "fs";
 import multer from "multer"
 import storageDriver from "../../helpers/storageDriver";
 
-import {hasAuthorization} from "../../helpers/authHandler";
+import { hasAuthorization, requiredSignin } from "../../helpers/authHandler";
 
 
 
 export default defineEventHandler(async (event: H3Event) => {
     // await hasAuthorization(event)
     try {
+        await requiredSignin(event)
         await hasAuthorization(event)
         const user: void | User = await readUserById(event)
         const { firstName, lastName, password, about, profileImage } = await readBody(event)

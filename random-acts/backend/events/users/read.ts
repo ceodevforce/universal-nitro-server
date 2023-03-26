@@ -9,6 +9,7 @@ export default defineEventHandler(async (event: H3Event) => {
         user.passwordHash = undefined
         const status = getResponseStatus(event)
         const cookies = setCookie(event, "randomacts", "Cookies are good")
+        console.log(event.node.req)
 
         return {
             user,

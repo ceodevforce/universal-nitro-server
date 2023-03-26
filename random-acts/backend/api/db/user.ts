@@ -42,7 +42,7 @@ export const findAllUser = async () => {
 export const readUserById = async (event: H3Event) => {
     try {
         // @ts-ignore
-        const { id: userId } = await getRouterParams(event)
+        // const { id: userId } = await getRouterParams(event)
         const id = event.context.params.id
         const user = await prisma.user.findUnique({
             where: {
