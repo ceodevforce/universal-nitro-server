@@ -6,6 +6,7 @@ import formidable from "formidable";
 import * as fs from "fs";
 import multer from "multer";
 import storageDriver from "../../helpers/storageDriver";
+import { prisma } from "../../api/db";
 
 import { hasAuthorization, requiredSignin } from "../../helpers/authHandler";
 
@@ -15,7 +16,7 @@ export default defineEventHandler(async (event: H3Event) => {
   const form = new formidable.IncomingForm({ multiples: true });
   form.keepExtensions = true;
   form.parse(event.node.req, async (err, fields, files) => {
-    console.log("files: ", files);
+    // console.log("files: ", files);
     if (err) {
       return sendError(
         event,
@@ -38,9 +39,13 @@ export default defineEventHandler(async (event: H3Event) => {
       user.lastName = lastName;
       user.about = about;
 
-      user.updated = Date.now();
-      if (files.profileImage) {
-        user.profileImage = fs.readFileSync(files.profileImage.filepath);
+      user.updated = new Date();
+        if (files.profileImage) {
+            await storageDriver.setItem("profileImage", files.profileImage)
+            const profileImageUrl = await storageDriver.getItem("profileImage")
+            console.log("Image: ", profileImageUrl);
+            user.profileImage = profileImageUrl.filepath;
+        // user.profileImage = fs.readFileSync(files.profileImage.filepath);
       }
 
       const { id } = user;

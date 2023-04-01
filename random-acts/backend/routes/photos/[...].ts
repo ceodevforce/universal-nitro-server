@@ -1,16 +1,19 @@
-import { createRouter, useBase, defineEventHandler} from "h3";
+import { createRouter, useBase, defineEventHandler } from "h3";
 import storageDriver from "../../helpers/storageDriver";
+import { prisma } from "../../api/db";
 
+const router = createRouter();
 
-const router = createRouter()
+router.get(
+  "/all",
+  defineEventHandler(async (event) => {
+    // const { id } = event.context.params.id
+    // const storage  = await storageDriver
 
+    // await storage.getItem(`${id}`)
+    const photos = await prisma.sTORAGE.findMany();
+    return photos;
+  })
+);
 
-router.get('/', defineEventHandler(async (event) => {
-    const { id } = event.context.params.id
-    const storage  = await storageDriver
-
-    return await storage.getItem(`${id}`)
-}))
-
-
-useBase('/photos', router.handler)
+useBase("/photos", router.handler);
