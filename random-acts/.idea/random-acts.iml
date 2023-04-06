@@ -9,5 +9,6 @@
     <orderEntry type="module" module-name="@mps-cookie-engine" />
     <orderEntry type="module" module-name="vbennett" />
     <orderEntry type="module" module-name="bennett-app" />
+    <orderEntry type="module" module-name="nuxt-tauri-app" />
   </component>
 </module>

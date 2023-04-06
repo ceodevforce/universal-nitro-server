@@ -28,7 +28,7 @@ export default defineEventHandler(async (event: H3Event) => {
     }
 
     try {
-      const user: void | User = await readUserById(event);
+      const user: Partial<User> = await readUserById(event);
 
       // const { firstName, lastName, password, about, profileImage } =
       //   await readBody(event);
@@ -78,27 +78,6 @@ export default defineEventHandler(async (event: H3Event) => {
       );
     }
 
-    //   const { firstName, lastName, password, about, profileImage } = await readBody(event)
 
-    // @ts-ignore
-    //   const { id } = user
-    //   const updateUserDto = {
-    //       id,
-    //       firstName,
-    //       lastName,
-    //       password,
-    //       about,
-    //       profileImage
-    //   }
-
-    //   if (files.profileImage) {
-    //       updateUserDto.profileImage = fs.readFileSync(files.profileImage.path)
-    //   }
-
-    //   const response = await updateUser(updateUserDto)
-    //   return {
-    //       status,
-    //       response
-    //   }
   });
 });

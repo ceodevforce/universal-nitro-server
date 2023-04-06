@@ -39,18 +39,18 @@ export const findAllUser = async () => {
  * @param event: H3Event
  * @description finds a user by ID
  */
-export const readUserById = async (event: H3Event) => {
+export const readUserById = async (event: H3Event): Partial<User> => {
     try {
         // @ts-ignore
         // const { id: userId } = await getRouterParams(event)
         const id = event.context.params.id
-        const user = await prisma.user.findUnique({
+        const user: Partial<User> = await prisma.user.findUnique({
             where: {
                 id: parseInt(id)
             }
         })
         if (!user) {
-            return sendError(event, createError({
+            sendError(event, createError({
                 statusCode: 404,
                 statusMessage: "User not found"
             }))
